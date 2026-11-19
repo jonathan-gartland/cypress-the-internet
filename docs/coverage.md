@@ -11,10 +11,10 @@ libraries, APIs). ●●● common · ●● sometimes · ● mostly a legacy or
 
 | Status | Count |
 | --- | --- |
-| ✅ Covered | 27 |
+| ✅ Covered | 38 |
 | ➖ Covered by another spec | 2 |
 | 🟡 Accessibility scan only | 3 |
-| 🔜 Planned | 44 |
+| 🔜 Planned | 33 |
 
 ## Covered
 
@@ -47,30 +47,21 @@ libraries, APIs). ●●● common · ●● sometimes · ● mostly a legacy or
 | Two-Factor Login `/two_factor` | `two-factor-login` | Password plus a one-time code | ●●● |
 | Form Validation `/form_validation` | `form-validation` | Browser validation plus 422 errors from the server | ●●● |
 | Custom Dropdown `/custom_dropdown` | `custom-dropdown` | `<div>` listbox with ARIA roles instead of `<select>` | ●●● |
+| Live Updates `/live_updates` | `live-updates` | Server-Sent Events pushed over time | ●● |
+| WebSocket `/websocket` | `websocket` | Bidirectional messages, server-side close rules | ●● |
+| Chat `/chat` | `chat` | Two users in the same room | ●● |
+| Browser Permissions `/permissions` | `browser-permissions` | Notification, clipboard and camera prompts outside the page | ●● |
+| Locale & Time Zone `/locale` | `locale-time-zone` | `Accept-Language`, browser locale and time zone formatting | ●● |
+| Modern File Download `/download_modern` | `modern-file-download` | Blob and data-URL downloads, `Content-Disposition` quirks | ●● |
+| Date & Time Pickers `/date_pickers` | `date-time-pickers` | Native pickers differ by browser; a JS calendar widget | ●●● |
+| Pointer Events `/pointer_events` | `pointer-events` | Sort, swipe and long-press with pointer events, not HTML5 DnD | ●●● |
+| SVG `/svg` | `svg` | Elements in the SVG namespace; clickable chart parts | ●● |
+| Advanced Iframes `/iframes_advanced` | `advanced-iframes` | Sandboxed cross-origin frame, `srcdoc`, iframe in shadow DOM | ●● |
+| Advanced Shadow DOM `/shadowdom_advanced` | `advanced-shadow-dom` | Nested and closed shadow roots; form-associated custom element | ●● |
 | Frames `/frames` | ➖ `iframes` | Index page for Nested Frames and the iFrame editor | ● |
 | WYSIWYG Editor `/tinymce` | ➖ `iframes` | Same TinyMCE editor as `/iframe` | ●● |
 
-## Planned: modern-app concerns (batch 3b)
-
-The pages Sauce Labs added for current web apps. Most of these problems are common in apps built
-today, and several show where Cypress's design (automatic retries, re-querying, network control)
-removes a problem that Selenium-style tools have.
-
-| Page | What's hard | Modern? | Approach |
-| --- | --- | --- | --- |
-| Live Updates `/live_updates` | Server-Sent Events pushed over time | ●● | Short `?interval=`; assert on the stream of updates |
-| WebSocket `/websocket` | Bidirectional messages, server-side close rules | ●● | Drive the UI; check echoes and close states |
-| Chat `/chat` | Two users in the same room | ●● | Second user as a WebSocket client from Node (`cy.task`) |
-| Browser Permissions `/permissions` | Notification, clipboard and camera prompts outside the page | ●● | Stub the permissions API per state |
-| Locale & Time Zone `/locale` | `Accept-Language`, browser locale and time zone formatting | ●● | Set the header with `cy.intercept`; `?lang=`; locale/time-zone stubs |
-| Modern File Download `/download_modern` | Blob and data-URL downloads, `Content-Disposition` quirks | ●● | Read files from the downloads folder; check names and contents |
-| Date & Time Pickers `/date_pickers` | Native pickers differ by browser; a JS calendar widget | ●●● | Type ISO values into native inputs; drive the widget |
-| Pointer Events `/pointer_events` | Sort, swipe and long-press with pointer events, not HTML5 DnD | ●●● | `trigger('pointerdown'/'pointermove'/'pointerup')` |
-| SVG `/svg` | Elements in the SVG namespace; clickable chart parts | ●● | Select by attribute; check selection state and colour |
-| Advanced Iframes `/iframes_advanced` | Sandboxed cross-origin frame, `srcdoc`, iframe in shadow DOM | ●● | `postMessage` result for the sandbox; `cy.iframeBody` for the rest |
-| Advanced Shadow DOM `/shadowdom_advanced` | Nested and closed shadow roots; form-associated custom element | ●● | Nested `.shadow()`; document what closed roots hide |
-
-Batch 3a (covered above) also switched `cy.login` to the Users API: `cy.createUser` makes a unique
+Batch 3 also switched `cy.login` to the Users API: `cy.createUser` makes a unique
 user with `POST /api/users`, and `cy.login` gets the session cookie from `POST /api/sessions`, so
 only the authentication spec goes through the login form.
 
