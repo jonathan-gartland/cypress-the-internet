@@ -15,6 +15,9 @@ public Heroku site. Runs are repeatable, work offline, and never depend on someo
 15 specs, 56 tests. Each covers a the-internet page (or a few) and shows a technique for something that's
 awkward to automate.
 
+[docs/coverage.md](docs/coverage.md) reviews all 76 the-internet pages: what each makes hard to
+automate, how common that is in modern apps, and which are covered or planned.
+
 | Spec | Page | What it shows |
 | --- | --- | --- |
 | `authentication` | Form Authentication | Valid and invalid logins (data-driven), logout, secure area blocked afterwards; `cy.session` login command |
