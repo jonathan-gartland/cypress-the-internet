@@ -65,6 +65,10 @@ jobs:
           path: ~/.cache/Cypress
           key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install --frozen-lockfile
+      # The lint job installs with CYPRESS_INSTALL_BINARY=0 and pnpm can reuse that cached build,
+      # skipping Cypress's postinstall download. Install the binary explicitly (fast when cached).
+      - name: Install Cypress binary
+        run: pnpm exec cypress install
 
       - name: Run Cypress (${{ matrix.browser }})
         run: pnpm cy:run --browser ${{ matrix.browser }}

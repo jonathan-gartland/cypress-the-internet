@@ -13,6 +13,13 @@ updates:
       # Patch and minor bumps arrive as one PR; each major gets its own.
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Types track the Node version we run (.nvmrc); bump together with Node.
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
+      # typescript-eslint doesn't support TypeScript 7 yet (CLAUDE.md). Remove once it does.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /
