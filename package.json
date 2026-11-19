@@ -1,0 +1,36 @@
+{
+  "name": "cypress-the-internet",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "description": "Cypress + TypeScript end-to-end suite for Sauce Labs' the-internet, run against a pinned Docker build",
+  "author": "Jonathan Gartland",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "app:up": "docker compose up -d --build --wait",
+    "app:down": "docker compose down",
+    "cy:open": "cypress open --e2e",
+    "cy:run": "cypress run --e2e --browser chrome",
+    "test": "pnpm app:up && pnpm cy:run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^10.0.0",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@types/node": "^24.19.2",
+    "cypress": "^16.3.0",
+    "eslint": "^10.15.0",
+    "eslint-plugin-cypress": "^7.0.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.1",
+    "typescript": "^6.0.3"
+  }
+}

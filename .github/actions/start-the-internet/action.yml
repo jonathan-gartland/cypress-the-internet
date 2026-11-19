@@ -1,0 +1,27 @@
+name: Start the-internet
+description: Builds the-internet at the pinned commit (layers cached between runs) and starts it with docker compose on http://localhost:5050.
+
+inputs:
+  ref:
+    description: saucelabs/the-internet commit to build
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: docker/setup-buildx-action@v4
+
+    - name: Build the-internet
+      uses: docker/build-push-action@v7
+      with:
+        context: https://github.com/saucelabs/the-internet.git#${{ inputs.ref }}
+        tags: the-internet:local
+        load: true
+        cache-from: type=gha,scope=the-internet
+        cache-to: type=gha,scope=the-internet,mode=max
+
+    - name: Start the-internet
+      shell: bash
+      run: docker compose up -d --no-build --wait
+      env:
+        THE_INTERNET_REF: ${{ inputs.ref }}

@@ -1,0 +1,16 @@
+# the-internet (https://github.com/saucelabs/the-internet), built from a pinned commit so the
+# suite runs against the same app locally and in CI. Bump THE_INTERNET_REF to test a newer build.
+services:
+  the-internet:
+    build:
+      context: https://github.com/saucelabs/the-internet.git#${THE_INTERNET_REF:-dd692f41b39503a8355693d6ce1c49a67955f19b}
+    image: the-internet:local
+    ports:
+      # Host port 5050: 5000 is often taken on macOS (AirPlay Receiver, Datadog agent)
+      - '5050:5000'
+    healthcheck:
+      # The image has Ruby but no curl
+      test: [CMD, ruby, -rnet/http, -e, 'exit Net::HTTP.get_response(URI("http://localhost:5000/")).is_a?(Net::HTTPSuccess) ? 0 : 1']
+      interval: 2s
+      timeout: 5s
+      retries: 30

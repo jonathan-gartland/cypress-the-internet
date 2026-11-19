@@ -1,0 +1,82 @@
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Lets the deps agent re-run CI after pushing a fix (pushes with GITHUB_TOKEN don't trigger runs)
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in sync with the default in docker-compose.yml
+  THE_INTERNET_REF: dd692f41b39503a8355693d6ce1c49a67955f19b
+
+# Job names are worth keeping stable if they become required status checks.
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+      - run: pnpm lint
+      - run: pnpm type-check
+      # commit-msg rules only run locally; make sure commitlint still accepts valid messages and
+      # rejects invalid ones after dependency updates.
+      - name: Commitlint smoke test
+        run: |
+          echo "ci: smoke test" | pnpm exec commitlint
+          if echo "not a conventional commit" | pnpm exec commitlint; then
+            echo "::error::commitlint accepted an invalid message"
+            exit 1
+          fi
+
+  cypress:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/start-the-internet
+        with:
+          ref: ${{ env.THE_INTERNET_REF }}
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: pnpm
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run Cypress (${{ matrix.browser }})
+        run: pnpm cy:run --browser ${{ matrix.browser }}
+
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: cypress/screenshots
+          if-no-files-found: ignore
+
+      - name: App logs
+        if: failure()
+        run: docker compose logs the-internet

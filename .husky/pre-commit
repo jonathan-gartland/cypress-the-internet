@@ -1,0 +1,24 @@
+#!/bin/sh
+
+printf '===\n>> Checking branch name...\n'
+
+# Set SKIP_BRANCH_PROTECTION=1 to commit on main (e.g. the initial commit)
+if [ -z "$SKIP_BRANCH_PROTECTION" ]; then
+    BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD)
+
+    case "$BRANCH" in
+        main*|master*)
+            echo ">> Direct commits to the $BRANCH branch are not allowed. Please choose a new branch name."
+            exit 1
+            ;;
+    esac
+else
+    echo ">> Skipping branch protection."
+fi
+
+echo ">> Finish checking branch name"
+echo ">> Type-checking, then linting and formatting staged files..."
+
+# The e2e suite needs Docker and is left to CI and `pnpm test`
+pnpm type-check
+pnpm exec lint-staged
