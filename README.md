@@ -12,7 +12,7 @@ public Heroku site. Runs are repeatable, work offline, and never depend on someo
 
 ## What it covers
 
-15 specs, 56 tests. Each covers a the-internet page (or a few) and shows a technique for something that's
+28 specs, 110 tests. Each covers a the-internet page (or a few) and shows a technique for something that's
 awkward to automate.
 
 [docs/coverage.md](docs/coverage.md) reviews all 76 the-internet pages: what each makes hard to
@@ -20,7 +20,7 @@ automate, how common that is in modern apps, and which are covered or planned.
 
 | Spec | Page | What it shows |
 | --- | --- | --- |
-| `authentication` | Form Authentication | Valid and invalid logins (data-driven), logout, secure area blocked afterwards; `cy.session` login command |
+| `authentication` | Form Authentication | Valid and invalid logins (data-driven), logout, users created and deleted through the Users API; `cy.login` gets the session from the API with `cy.session` |
 | `dynamic-loading` | Dynamic Loading | Waiting on the app with a longer assertion timeout, never `cy.wait(ms)` |
 | `javascript-alerts` | JavaScript Alerts | `window:alert`/`window:confirm` events to check text and choose OK or Cancel; stubbing `window.prompt` |
 | `sortable-tables` | Sortable Data Tables | Reading a table into typed rows and checking sort order on the data |
@@ -35,6 +35,19 @@ automate, how common that is in modern apps, and which are covered or planned.
 | `autocomplete` | Autocomplete | Waiting on the real request, keyboard selection and ARIA state; `cy.intercept` stubs for fixture, empty and slow responses |
 | `geolocation` | Geolocation | Stubbing `navigator.geolocation` before load, so there's no permission prompt |
 | `accessibility` | Several pages | axe-core via a `cy.checkA11y` command: clean pages must stay clean, known violations are pinned by rule |
+| `spa-routing` | SPA Routing | `pushState` navigation with no reload (proved with a window marker), Back/Forward, deep links |
+| `stale-element` | Stale Element | A list rebuilt on a timer: Cypress re-queries, and aliases re-query to the new elements |
+| `virtualized-list` | Virtualized List | Scrolling a 10,000-row list until the target row exists in the DOM |
+| `slow-failing-api` | Slow & Failing API | Client retries on 429/500/503 from the real server, plus failure sequences scripted with `cy.intercept` |
+| `network-console` | Network & Console | Requests via `cy.intercept`, console spies, `uncaught:exception`, and a CSP violation report |
+| `cookie-consent` | Cookie Consent | Accept, reject and custom choices saved in a cookie; `cy.setCookie` to skip the banner |
+| `native-dialog` | Native Dialog | `<dialog>` focus, `:modal` state, an inert page, return values; Escape via `cypress-real-events` (Chromium) |
+| `toasts` | Toasts | Auto-hiding messages timed exactly with `cy.clock`/`cy.tick` |
+| `responsive-layout` | Responsive Layout | `cy.viewport` at desktop and mobile sizes: hamburger menu and stacked cards |
+| `form-validation` | Form Validation | Browser `validity` state that blocks the request, and 422 errors from the server |
+| `custom-dropdown` | Custom Dropdown | A `<div>` listbox driven by mouse and keyboard, skipping a disabled option, with ARIA state |
+| `accessibility-issues` | Accessibility Issues | Every issue the page declares is found by axe on the right element; the fixed page is clean |
+| `two-factor-login` | Two-Factor Login | Password then one-time code, a wrong code, and the secure area blocked after only a password |
 
 ## Running it
 
