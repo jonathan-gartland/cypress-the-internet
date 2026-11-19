@@ -53,4 +53,30 @@ describe('form authentication', () => {
     cy.location('pathname').should('eq', '/login')
     cy.get('#flash').should('contain', 'You must login to view the secure area!')
   })
+
+  describe('with a user created through the API', () => {
+    it('logs in through the form', () => {
+      cy.createUser().then((user) => {
+        cy.get('#username').type(user.username)
+        cy.get('#password').type(user.password, { log: false })
+        cy.contains('button', 'Login').click()
+
+        cy.location('pathname').should('eq', '/secure')
+        cy.get('#username').should('have.text', user.username)
+      })
+    })
+
+    it('ends the session when the user is deleted', () => {
+      cy.createUser().then((user) => {
+        cy.login(user)
+        cy.visit('/secure')
+        cy.get('#username').should('have.text', user.username)
+
+        cy.request('DELETE', `/api/users/${user.username}`).its('status').should('eq', 204)
+
+        cy.visit('/secure')
+        cy.location('pathname').should('eq', '/login')
+      })
+    })
+  })
 })

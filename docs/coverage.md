@@ -11,10 +11,10 @@ libraries, APIs). ●●● common · ●● sometimes · ● mostly a legacy or
 
 | Status | Count |
 | --- | --- |
-| ✅ Covered | 14 |
+| ✅ Covered | 27 |
 | ➖ Covered by another spec | 2 |
-| 🟡 Accessibility scan only | 5 |
-| 🔜 Planned | 55 |
+| 🟡 Accessibility scan only | 3 |
+| 🔜 Planned | 44 |
 
 ## Covered
 
@@ -34,10 +34,23 @@ libraries, APIs). ●●● common · ●● sometimes · ● mostly a legacy or
 | Status Codes `/status_codes` | `status-codes` | Non-2xx responses fail `cy.visit` by default | ●● |
 | Autocomplete `/autocomplete` | `autocomplete` | Debounced requests, keyboard + ARIA state, slow/empty responses | ●●● |
 | Geolocation `/geolocation` | `geolocation` | Browser permission prompt outside the page | ●● |
+| SPA Routing `/spa` | `spa-routing` | URL changes with `pushState`, no page load; Back/Forward; deep links | ●●● |
+| Stale Element `/stale_element` | `stale-element` | List re-rendered on a timer; held references go stale | ●●● |
+| Virtualized List `/virtual_list` | `virtualized-list` | 10,000 rows, only visible rows in the DOM | ●●● |
+| Slow & Failing API `/slow_api` | `slow-failing-api` | Delays, 429/500/503 and client retries | ●●● |
+| Network & Console `/network_console` | `network-console` | Requests, console errors, uncaught errors, CSP violations | ●●● |
+| Cookie Consent `/cookie_consent` | `cookie-consent` | Banner covers the page until a choice is saved in a cookie | ●●● |
+| Native Dialog `/dialog` | `native-dialog` | `<dialog>` modal focus trap, Escape, non-modal | ●●● |
+| Toasts `/toasts` | `toasts` | Messages that hide themselves after a set time | ●●● |
+| Responsive Layout `/responsive` | `responsive-layout` | Hamburger menu below 640px | ●●● |
+| Accessibility Issues `/accessibility_issues` | `accessibility-issues` | Deliberate violations and a fixed version | ●●● |
+| Two-Factor Login `/two_factor` | `two-factor-login` | Password plus a one-time code | ●●● |
+| Form Validation `/form_validation` | `form-validation` | Browser validation plus 422 errors from the server | ●●● |
+| Custom Dropdown `/custom_dropdown` | `custom-dropdown` | `<div>` listbox with ARIA roles instead of `<select>` | ●●● |
 | Frames `/frames` | ➖ `iframes` | Index page for Nested Frames and the iFrame editor | ● |
 | WYSIWYG Editor `/tinymce` | ➖ `iframes` | Same TinyMCE editor as `/iframe` | ●● |
 
-## Planned: modern-app concerns (batch 3)
+## Planned: modern-app concerns (batch 3b)
 
 The pages Sauce Labs added for current web apps. Most of these problems are common in apps built
 today, and several show where Cypress's design (automatic retries, re-querying, network control)
@@ -45,33 +58,21 @@ removes a problem that Selenium-style tools have.
 
 | Page | What's hard | Modern? | Approach |
 | --- | --- | --- | --- |
-| SPA Routing `/spa` | URL changes with `pushState`, no page load; Back/Forward; deep links | ●●● | `cy.location`, `cy.go('back')`, visit each route directly |
-| Stale Element `/stale_element` | List re-rendered on a timer; held references go stale | ●●● | Show Cypress re-queries on retry; contrast with an aliased element |
-| Virtualized List `/virtual_list` | 10,000 rows, only visible rows in the DOM | ●●● | Scroll the container until the row exists, then assert |
-| Slow & Failing API `/slow_api` | Delays, 429/500/503 and client retries | ●●● | `cy.intercept` to force failure sequences; check retry and error UI |
-| Network & Console `/network_console` | Requests, console errors, uncaught errors, CSP violations | ●●● | `cy.intercept`, spy on `console`, `uncaught:exception` handler |
-| Cookie Consent `/cookie_consent` | Banner covers the page until a choice is saved in a cookie | ●●● | `cy.setCookie` to skip it; test accept/reject paths |
-| Native Dialog `/dialog` | `<dialog>` modal focus trap, Escape, non-modal | ●●● | Check `open`, focus and Escape behaviour |
-| Toasts `/toasts` | Messages that hide themselves after a set time | ●●● | `cy.clock`/`cy.tick` instead of waiting for the timeout |
 | Live Updates `/live_updates` | Server-Sent Events pushed over time | ●● | Short `?interval=`; assert on the stream of updates |
 | WebSocket `/websocket` | Bidirectional messages, server-side close rules | ●● | Drive the UI; check echoes and close states |
 | Chat `/chat` | Two users in the same room | ●● | Second user as a WebSocket client from Node (`cy.task`) |
 | Browser Permissions `/permissions` | Notification, clipboard and camera prompts outside the page | ●● | Stub the permissions API per state |
 | Locale & Time Zone `/locale` | `Accept-Language`, browser locale and time zone formatting | ●● | Set the header with `cy.intercept`; `?lang=`; locale/time-zone stubs |
-| Responsive Layout `/responsive` | Hamburger menu below 640px | ●●● | `cy.viewport` at desktop and mobile sizes |
 | Modern File Download `/download_modern` | Blob and data-URL downloads, `Content-Disposition` quirks | ●● | Read files from the downloads folder; check names and contents |
 | Date & Time Pickers `/date_pickers` | Native pickers differ by browser; a JS calendar widget | ●●● | Type ISO values into native inputs; drive the widget |
 | Pointer Events `/pointer_events` | Sort, swipe and long-press with pointer events, not HTML5 DnD | ●●● | `trigger('pointerdown'/'pointermove'/'pointerup')` |
 | SVG `/svg` | Elements in the SVG namespace; clickable chart parts | ●● | Select by attribute; check selection state and colour |
 | Advanced Iframes `/iframes_advanced` | Sandboxed cross-origin frame, `srcdoc`, iframe in shadow DOM | ●● | `postMessage` result for the sandbox; `cy.iframeBody` for the rest |
 | Advanced Shadow DOM `/shadowdom_advanced` | Nested and closed shadow roots; form-associated custom element | ●● | Nested `.shadow()`; document what closed roots hide |
-| Accessibility Issues `/accessibility_issues` | Deliberate violations and a fixed version | ●●● | Pin the broken page's violations; the fixed page must be clean |
-| Two-Factor Login `/two_factor` | Password plus a one-time code | ●●● | Full flow; log in through `POST /api/sessions` for setup |
-| Form Validation `/form_validation` 🟡 | Browser validation plus 422 errors from the server | ●●● | `validity` state and server error messages |
-| Custom Dropdown `/custom_dropdown` 🟡 | `<div>` listbox with ARIA roles instead of `<select>` | ●●● | Keyboard and ARIA state like Autocomplete |
 
-Also in batch 3: switch `cy.login` to the Users API (`POST /api/users`, `POST /api/sessions`) with a
-unique user per test, which is faster and how setup is done in apps with an API.
+Batch 3a (covered above) also switched `cy.login` to the Users API: `cy.createUser` makes a unique
+user with `POST /api/users`, and `cy.login` gets the session cookie from `POST /api/sessions`, so
+only the authentication spec goes through the login form.
 
 ## Planned: classic patterns (batch 4)
 

@@ -33,7 +33,16 @@ it to 7 until typescript-eslint does.
 - No `{ force: true }` unless the page makes it unavoidable; say why in a comment.
 - Assert on data and behaviour, not just that elements exist.
 - Prefer `cy.contains`/ids over brittle CSS paths. Shared steps go in `cypress/support/commands.ts`
-  as typed custom commands; use `cy.session` for logins.
+  as typed custom commands.
+- Set up through the API, not the UI: `cy.createUser()` makes a unique user (`POST /api/users`) and
+  `cy.login(user)` gets the session from `POST /api/sessions`, cached with `cy.session`. Only
+  `authentication.cy.ts` uses the login form.
+- Tests that need real input events (CSS `:hover`, Escape on a `<dialog>`) use `cypress-real-events`,
+  which is Chromium only: mark them `{ browser: '!firefox' }` and say why in a comment.
+- Simulated typing doesn't set the browser's "user edited" flag, so `validity.tooShort`/`tooLong`
+  never fire. Check those rules on the server side instead.
+- `experimentalCspAllowList: true` keeps the app's CSP headers (minus what Cypress needs), so CSP
+  behaviour is real.
 - Specs must pass in Chrome and Firefox (CI runs both).
 
 ## Updating the-internet

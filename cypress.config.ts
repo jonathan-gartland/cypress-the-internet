@@ -12,4 +12,9 @@ export default defineConfig({
     screenshotOnRunFailure: true,
     retries: { runMode: 1, openMode: 0 },
   },
+  // Cypress strips Content-Security-Policy headers so it can inject itself. `true` keeps every
+  // directive that doesn't interfere with Cypress, so the Network & Console page's report-only
+  // img-src policy still reports its violation. (The array form only accepts script/frame
+  // directives, not img-src.)
+  experimentalCspAllowList: true,
 })
