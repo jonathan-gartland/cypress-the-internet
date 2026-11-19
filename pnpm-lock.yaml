@@ -20,9 +20,15 @@ importers:
       '@types/node':
         specifier: ^24.19.2
         version: 24.19.2
+      axe-core:
+        specifier: ^4.14.1
+        version: 4.14.1
       cypress:
         specifier: ^16.3.0
         version: 16.3.0
+      cypress-real-events:
+        specifier: ^1.15.1
+        version: 1.15.1(cypress@16.3.0)
       eslint:
         specifier: ^10.15.0
         version: 10.15.0(jiti@2.7.0)
@@ -605,6 +611,10 @@ packages:
   aws4@1.13.2:
     resolution: {integrity: sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==}
 
+  axe-core@4.14.1:
+    resolution: {integrity: sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==}
+    engines: {node: '>=4'}
+
   balanced-match@4.0.4:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
@@ -790,6 +800,11 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  cypress-real-events@1.15.1:
+    resolution: {integrity: sha512-BiTyqYcNHiIFWfSLRn3H+TgTvpnTGOKfl4Brz51yeSGKMxBbD60wtRQw31nII00yQ67Xg3C18mU8lqUxDN3OUA==}
+    peerDependencies:
+      cypress: ^4.x || ^5.x || ^6.x || ^7.x || ^8.x || ^9.x || ^10.x || ^11.x || ^12.x || ^13.x || ^14.x || ^15.x || ^16.x
 
   cypress@16.3.0:
     resolution: {integrity: sha512-h5qq6G9wgNEMWEUFejeBwj7fzwJljrO54n3wAa7yW2Q/8ORnkq4tQBqUhY4g9UM5uOazKmr4ay8YcKi+SJJ1ng==}
@@ -2894,6 +2909,8 @@ snapshots:
 
   aws4@1.13.2: {}
 
+  axe-core@4.14.1: {}
+
   balanced-match@4.0.4: {}
 
   base64-js@1.5.1: {}
@@ -3063,6 +3080,10 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  cypress-real-events@1.15.1(cypress@16.3.0):
+    dependencies:
+      cypress: 16.3.0
 
   cypress@16.3.0:
     dependencies:

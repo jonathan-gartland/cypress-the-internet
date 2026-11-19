@@ -12,12 +12,26 @@ public Heroku site. Runs are repeatable, work offline, and never depend on someo
 
 ## What it covers
 
-| Spec                     | Page                                       | What it shows                                                                                                    |
-| ------------------------ | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `authentication.cy.ts`   | Form Authentication                        | Valid and invalid logins (data-driven), logout, the secure area blocked afterwards; `cy.session` login command   |
-| `dynamic-loading.cy.ts`  | Dynamic Loading                            | Waiting on the app with a longer assertion timeout, never `cy.wait(ms)`                                          |
-| `javascript-alerts.cy.ts`| JavaScript Alerts                          | `window:alert` / `window:confirm` events to check text and choose OK or Cancel; stubbing `window.prompt`         |
-| `sortable-tables.cy.ts`  | Sortable Data Tables                       | Reading a table into typed rows and checking sort order on the data                                              |
+15 specs, 56 tests. Each covers a the-internet page (or a few) and shows a technique for something that's
+awkward to automate.
+
+| Spec | Page | What it shows |
+| --- | --- | --- |
+| `authentication` | Form Authentication | Valid and invalid logins (data-driven), logout, secure area blocked afterwards; `cy.session` login command |
+| `dynamic-loading` | Dynamic Loading | Waiting on the app with a longer assertion timeout, never `cy.wait(ms)` |
+| `javascript-alerts` | JavaScript Alerts | `window:alert`/`window:confirm` events to check text and choose OK or Cancel; stubbing `window.prompt` |
+| `sortable-tables` | Sortable Data Tables | Reading a table into typed rows and checking sort order on the data |
+| `iframes` | iFrame, Nested Frames | Typing and formatting inside TinyMCE's iframe; frames nested in frames, via a `cy.iframeBody` command |
+| `shadow-dom` | Shadow DOM | `.shadow()`, `includeShadowDom`, computed styles inside the shadow root, slotted content |
+| `multiple-windows` | Multiple Windows | Checking a `target="_blank"` link, then opening its page in the same tab (Cypress drives one tab) |
+| `file-upload` | File Upload | `selectFile` through the form and by drag-and-drop onto a Dropzone, waiting on the upload request |
+| `file-download` | File Download | Downloading through the UI and comparing the saved file byte for byte with the server's |
+| `drag-and-drop` | Drag and Drop | Firing HTML5 drag events with a shared `DataTransfer` to swap columns |
+| `hovers` | Hovers | CSS `:hover` with `cypress-real-events` (Chromium only; skipped in Firefox) |
+| `status-codes` | Status Codes | `cy.request` for the HTTP status, `cy.visit` with `failOnStatusCode: false` for error pages |
+| `autocomplete` | Autocomplete | Waiting on the real request, keyboard selection and ARIA state; `cy.intercept` stubs for fixture, empty and slow responses |
+| `geolocation` | Geolocation | Stubbing `navigator.geolocation` before load, so there's no permission prompt |
+| `accessibility` | Several pages | axe-core via a `cy.checkA11y` command: clean pages must stay clean, known violations are pinned by rule |
 
 ## Running it
 
