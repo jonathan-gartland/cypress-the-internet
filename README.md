@@ -12,7 +12,7 @@ public Heroku site. Runs are repeatable, work offline, and never depend on someo
 
 ## What it covers
 
-28 specs, 110 tests. Each covers a the-internet page (or a few) and shows a technique for something that's
+39 specs, 164 tests. Each covers a the-internet page (or a few) and shows a technique for something that's
 awkward to automate.
 
 [docs/coverage.md](docs/coverage.md) reviews all 76 the-internet pages: what each makes hard to
@@ -48,6 +48,17 @@ automate, how common that is in modern apps, and which are covered or planned.
 | `custom-dropdown` | Custom Dropdown | A `<div>` listbox driven by mouse and keyboard, skipping a disabled option, with ARIA state |
 | `accessibility-issues` | Accessibility Issues | Every issue the page declares is found by axe on the right element; the fixed page is clean |
 | `two-factor-login` | Two-Factor Login | Password then one-time code, a wrong code, and the secure area blocked after only a password |
+| `live-updates` | Live Updates | Server-Sent Events from the real server, and a stream stubbed with `cy.intercept` |
+| `websocket` | WebSocket | Echoes, a clean close (1000) and the server closing an oversized message (1009) |
+| `chat` | Chat | Two users in one room: the page and a Node WebSocket client driven through `cy.task`; text stays text |
+| `browser-permissions` | Browser Permissions | Stubbing the permissions, notification, clipboard and camera APIs (Cypress can't grant permissions) |
+| `locale-time-zone` | Locale & Time Zone | `Accept-Language` via `cy.visit` headers, a stubbed `navigator.language`, a CDP time-zone override (Chromium) |
+| `modern-file-download` | Modern File Download | Blob, fetch-then-save and data URL downloads; `Content-Disposition` edge cases via `cy.request` |
+| `date-time-pickers` | Date & Time Pickers | ISO values into native inputs; a JS calendar opened on a fixed "today" with `cy.clock` |
+| `pointer-events` | Pointer Events | Sort, swipe and long press with synthetic pointer events, plus a real pointer via `cypress-real-events` |
+| `svg` | SVG | Reading chart data from SVG elements and clicking bars and shapes |
+| `advanced-iframes` | Advanced Iframes | A sandboxed frame the page can't read (testing its `postMessage` side), `srcdoc`, an iframe in a shadow root |
+| `advanced-shadow-dom` | Advanced Shadow DOM | Nested roots, slots, a form-associated element, and reaching a closed root by wrapping `attachShadow` |
 
 ## Running it
 

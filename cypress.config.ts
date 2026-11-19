@@ -1,10 +1,14 @@
 import { defineConfig } from 'cypress'
+import { chatUserTasks } from './cypress/tasks/chat-users'
 
 export default defineConfig({
   e2e: {
     // Local Docker build by default; set CYPRESS_BASE_URL=https://the-internet.herokuapp.com to
     // run against the hosted site instead.
     baseUrl: 'http://localhost:5050',
+    setupNodeEvents(on, config) {
+      on('task', chatUserTasks(config.baseUrl!))
+    },
     specPattern: 'cypress/e2e/**/*.cy.ts',
     viewportWidth: 1280,
     viewportHeight: 800,

@@ -43,6 +43,9 @@ it to 7 until typescript-eslint does.
   never fire. Check those rules on the server side instead.
 - `experimentalCspAllowList: true` keeps the app's CSP headers (minus what Cypress needs), so CSP
   behaviour is real.
+- Node-side helpers go in `cypress/tasks/` and are registered in `cypress.config.ts` (for example the
+  second chat user, a WebSocket client). `cy.task` doesn't retry, so a task that waits for
+  something does the waiting itself.
 - Specs must pass in Chrome and Firefox (CI runs both).
 
 ## Updating the-internet
